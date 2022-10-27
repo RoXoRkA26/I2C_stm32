@@ -100,7 +100,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_I2C1_Init();
+//  MX_I2C1_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
@@ -111,7 +111,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	  USART2_PutBuffer((uint8_t *)"Hello!", 6);
+	  LL_mDelay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
