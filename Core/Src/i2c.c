@@ -21,7 +21,13 @@
 #include "i2c.h"
 
 /* USER CODE BEGIN 0 */
+uint8_t* recv_buff;
+uint8_t flag_end_of_read = 0;
+volatile uint8_t recv_index = 0;
 
+// Procedures and functions
+void i2c_master_write(uint8_t data, uint8_t register_addr, uint8_t slave_addr, uint8_t flag_read);
+uint8_t* i2c_master_read(uint8_t* buffer, uint8_t length, uint8_t register_addr, uint8_t slave_addr, uint8_t read_flag);
 /* USER CODE END 0 */
 
 /* I2C1 init function */
@@ -82,5 +88,66 @@ void MX_I2C1_Init(void)
 }
 
 /* USER CODE BEGIN 1 */
+void i2c_master_write(uint8_t data, uint8_t register_addr, uint8_t slave_addr, uint8_t flag_read)
+{
+	if (flag_read)
+	{
+		register_addr |= (1 << 7);
+	}
+	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, 2, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_WRITE);
+	LL_I2C_TransmitData8(I2C1, data);
 
+	while (!LL_I2C_IsActiveFlag_STOP(I2C1))
+	{
+		if (LL_I2C_IsActiveFlag_TXIS(I2C1))
+		{
+			LL_I2C_TransmitData8(I2C1, data);
+		}
+	}
+	LL_I2C_ClearFlag_STOP(I2C1);
+}
+
+uint8_t* i2c_master_read(uint8_t* buffer, uint8_t length, uint8_t register_addr, uint8_t slave_addr, uint8_t flag_read)
+{
+	recv_buff = buffer;
+
+	if (flag_read)
+	{
+		register_addr |= (1 << 7);
+	}
+	flag_end_of_read = 0;
+	LL_I2C_EnableIT_RX(I2C1);
+	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, 1, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_WRITE);
+
+	while (!LL_I2C_IsActiveFlag_STOP(I2C1))
+	{
+		if (LL_I2C_IsActiveFlag_TXIS(I2C1))
+		{
+			LL_I2C_TransmitData8(I2C1, register_addr);
+		}
+	}
+	LL_I2C_ClearFlag_STOP(I2C1);
+	while (LL_I2C_IsActiveFlag_STOP(I2C1));
+
+	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, length, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_READ);
+
+		while(!LL_I2C_IsActiveFlag_STOP(I2C1)){};
+
+		//End of transfer
+		LL_I2C_ClearFlag_STOP(I2C1);
+		LL_I2C_DisableIT_RX(I2C1);
+		I2C1->ICR |= (1 << 4);
+		recv_index = 0;
+		flag_end_of_read = 1;
+
+		return recv_buff;
+}
+
+void USART2_IRQHandler(void)
+{
+	if (LL_USART_IsActiveFlag_TC(USART2))
+	{
+		LL_USART_ClearFlag_IDLE(USART2);
+	}
+}
 /* USER CODE END 1 */

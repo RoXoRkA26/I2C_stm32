@@ -111,7 +111,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  USART2_PutBuffer((uint8_t *)"Hello!", 6);
+	  USART2_PutBuffer((uint8_t *)"Hello!\r\n", 8);
 	  LL_mDelay(1000);
     /* USER CODE BEGIN 3 */
   }
