@@ -8,6 +8,7 @@
 #ifndef INC_LPS25HB_H_
 #define INC_LPS25HB_H_
 
+// Register address definitions
 #define LPS25HB_WHO_AM_I_ADDRESS			0x0f
 #define LPS25HB_WHO_AM_I_VALUE				0xBD
 
@@ -25,5 +26,10 @@
 
 #define LPS25HB_DEVICE_ADDRESS0				0xB8
 #define LPS25HB_DEVICE_ADDRESS1				0xBA
+
+// Function prototypes
+void LPS25HB_Init();
+void LPS25HB_Write(uint8_t data, uint8_t lenght);
+uint8_t* LPS25HB_Read();
 
 #endif /* INC_LPS25HB_H_ */
