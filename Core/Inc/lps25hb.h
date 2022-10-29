@@ -29,7 +29,7 @@
 
 // Function prototypes
 void LPS25HB_Init();
-void LPS25HB_Write(uint8_t data, uint8_t lenght);
-uint8_t* LPS25HB_Read();
+void LPS25HB_Write_Byte(uint8_t data, uint8_t lenght);
+uint8_t LPS25HB_Read_Byte(uint8_t reg_addr);
 
 #endif /* INC_LPS25HB_H_ */
