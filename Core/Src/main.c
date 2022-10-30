@@ -55,10 +55,20 @@ int main(void)
 //  lsm6ds0_init();
   LPS25HB_Init();
 
+  char message_pressure[128];
+  memset(message_pressure, 0, sizeof(message_pressure));
+
   while (1)
   {
+	  // Pressure
 	  float pressure = LPS25HB_get_pressure();
-	  LL_mDelay(1500);
+	  memset(message_pressure, '\0', sizeof(message_pressure));
+	  sprintf(message_pressure, "%7.3f\r", pressure);
+	  USART2_PutBuffer((uint8_t *)message_pressure, strlen(message_pressure));
+
+	  // Temperature
+
+	  LL_mDelay(25);
   }
 }
 
