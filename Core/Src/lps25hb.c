@@ -17,9 +17,9 @@ uint8_t LPS25HB_read_byte(uint8_t reg_addr)
 }
 
 // LPS25HB_write_byte implementation
-void LPS25HB_write_byte(uint8_t data, uint8_t register_addr, uint8_t slave_addr, uint8_t flag_read)
+void LPS25HB_write_byte(uint8_t data, uint8_t register_addr, uint8_t slave_addr)
 {
-	i2c_master_write(data, register_addr, slave_addr, flag_read);
+	i2c_master_write(data, register_addr, slave_addr, 0);
 }
 
 // LPS25HB_read_array implementation
@@ -32,11 +32,9 @@ void LPS25HB_read_array(uint8_t* data, uint8_t reg, uint8_t length)
 float LPS25HB_get_pressure()
 {
 	uint8_t pressure[3] = {0};
-	LPS25HB_read_array(&pressure[0], LPS25HB_PRESSURE_OUT_H, 1);
-	LPS25HB_read_array(&pressure[1], LPS25HB_PRESSURE_OUT_L, 1);
-	LPS25HB_read_array(&pressure[2], LPS25HB_PRESSURE_OUT_XL, 1);
+	LPS25HB_read_array(pressure, LPS25HB_PRESSURE_OUT_XL, 3);
 
-	float pressure_real = ((pressure[0] * 65536) + (pressure[1] * 256) + pressure[2]) / 4096.0;
+	float pressure_real = ((pressure[2] * 65536) + (pressure[1] * 256) + pressure[0]) / 4096.0;
 
 	return pressure_real;
 }
@@ -68,5 +66,19 @@ uint8_t LPS25HB_Init()
 			//return status;
 		}
 	}
+
+	// Set power-down mode to turn ON -> set PD to 1 to power on
+	// todo: Check if it's work
+	uint8_t reg_setup = LPS25HB_read_byte(LPS25HB_CONTROL_REG1);
+	reg_setup |= (1 << 7);
+	LPS25HB_write_byte(reg_setup, LPS25HB_CONTROL_REG1, lps25hb_address);
+	// Set Output data rate register to 1 Hz -> 0b001
+	reg_setup = LPS25HB_read_byte(LPS25HB_CONTROL_REG1);
+	// todo: Check if it's work
+	reg_setup |= (1 << 4);
+	LPS25HB_write_byte(reg_setup, LPS25HB_CONTROL_REG1, lps25hb_address);
+
+	reg_setup = LPS25HB_read_byte(LPS25HB_CONTROL_REG1);
+
 	return status;
 }
