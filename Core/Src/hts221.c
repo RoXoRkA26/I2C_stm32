@@ -28,6 +28,21 @@ void HTS221_read_array(uint8_t* data, uint8_t reg, uint8_t length)
 	i2c_master_read(data, length, reg, hts221_address, 1);
 }
 
+float HTS221_get_temperature()
+{
+	uint8_t temperature[2] = {0};
+	HTS221_read_array(temperature, 0x3C, 2);
+
+	float temp_real = ((temperature[1] * 256) + temperature[0]);
+
+	return 0.0;
+}
+
+float HTS221_get_humidity()
+{
+	return 0.0;
+}
+
 uint8_t HTS221_Init()
 {
 	uint8_t status = 1;

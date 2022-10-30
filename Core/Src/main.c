@@ -68,6 +68,7 @@ int main(void)
 	  float pressure = LPS25HB_get_pressure();
 
 	  // Temperature
+	  float temperature = HTS221_get_temperature();
 
 	  // Format string
 	  sprintf(message_pressure, "%7.3f\r", pressure);
