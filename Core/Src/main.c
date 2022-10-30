@@ -25,6 +25,7 @@
 #include "usart.h"
 #include "lsm6ds0.h"
 #include "lps25hb.h"
+#include "hts221.h"
 #include "stdio.h"
 #include "string.h"
 #include "dma.h"
@@ -54,6 +55,7 @@ int main(void)
 
 //  lsm6ds0_init();
   LPS25HB_Init();
+  HTS221_Init();
 
   char message_pressure[128];
   memset(message_pressure, 0, sizeof(message_pressure));
@@ -63,11 +65,14 @@ int main(void)
 	  // Pressure
 	  float pressure = LPS25HB_get_pressure();
 	  memset(message_pressure, '\0', sizeof(message_pressure));
-	  sprintf(message_pressure, "%7.3f\r", pressure);
 	  USART2_PutBuffer((uint8_t *)message_pressure, strlen(message_pressure));
 
 	  // Temperature
 
+	  // Format string
+	  sprintf(message_pressure, "%7.3f\r", pressure);
+
+	  // Delay
 	  LL_mDelay(25);
   }
 }
