@@ -23,7 +23,6 @@
 #include "i2c.h"
 #include "gpio.h"
 #include "usart.h"
-#include "lis3mdltr.h"
 #include "lsm6ds0.h"
 #include "stdio.h"
 #include "string.h"
