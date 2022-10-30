@@ -35,6 +35,7 @@
 uint8_t LPS25HB_Init();
 void LPS25HB_write_byte(uint8_t data, uint8_t register_addr, uint8_t slave_addr, uint8_t flag_read);
 uint8_t LPS25HB_read_byte(uint8_t reg_addr);
-void LPS25HB_get_pressure();
+void LPS25HB_read_array(uint8_t* data, uint8_t reg, uint8_t length);
+float LPS25HB_get_pressure();
 
 #endif /* INC_LPS25HB_H_ */

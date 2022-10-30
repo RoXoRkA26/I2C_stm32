@@ -57,7 +57,8 @@ int main(void)
 
   while (1)
   {
-
+	  float pressure = LPS25HB_get_pressure();
+	  LL_mDelay(1500);
   }
 }
 
