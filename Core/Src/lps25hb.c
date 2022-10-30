@@ -27,9 +27,9 @@ uint8_t LPS25HB_Init()
 	//LPS25hb_ACC_ON;
 	LL_mDelay(100);
 
-	uint8_t val = LPS25HB_Read_Byte(0x0F);
+	uint8_t val = LPS25HB_Read_Byte(LPS25HB_WHO_AM_I_ADDRESS);
 
-	if (val == 0x6C)
+	if (val == LPS25HB_WHO_AM_I_VALUE)
 	{
 		status = 1;
 	}
