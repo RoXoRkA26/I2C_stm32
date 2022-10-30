@@ -43,6 +43,16 @@ uint8_t HTS221_Init()
 		return status;
 	}
 
+	uint8_t reg_status = HTS221_read_byte(HTS221_CONTROL_REG);
+	// PD mode ON (power on)
+	reg_status |= (1 << 7);
+	HTS221_write_byte(reg_status, HTS221_CONTROL_REG, hts221_address);
+	// Output data rate setup
+	reg_status = HTS221_read_byte(HTS221_CONTROL_REG);
+	reg_status |= (1 << 0);
+	HTS221_write_byte(reg_status, HTS221_CONTROL_REG, hts221_address);
+
+	reg_status = HTS221_read_byte(HTS221_CONTROL_REG);
 
 	return status;
 }

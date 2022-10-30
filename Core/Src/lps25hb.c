@@ -68,13 +68,11 @@ uint8_t LPS25HB_Init()
 	}
 
 	// Set power-down mode to turn ON -> set PD to 1 to power on
-	// todo: Check if it's work
 	uint8_t reg_setup = LPS25HB_read_byte(LPS25HB_CONTROL_REG1);
 	reg_setup |= (1 << 7);
 	LPS25HB_write_byte(reg_setup, LPS25HB_CONTROL_REG1, lps25hb_address);
 	// Set Output data rate register to 1 Hz -> 0b001
 	reg_setup = LPS25HB_read_byte(LPS25HB_CONTROL_REG1);
-	// todo: Check if it's work
 	reg_setup |= (1 << 4);
 	LPS25HB_write_byte(reg_setup, LPS25HB_CONTROL_REG1, lps25hb_address);
 
