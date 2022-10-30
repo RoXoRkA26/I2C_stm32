@@ -62,15 +62,16 @@ int main(void)
 
   while (1)
   {
+	  memset(message_pressure, '\0', sizeof(message_pressure));
+
 	  // Pressure
 	  float pressure = LPS25HB_get_pressure();
-	  memset(message_pressure, '\0', sizeof(message_pressure));
-	  USART2_PutBuffer((uint8_t *)message_pressure, strlen(message_pressure));
 
 	  // Temperature
 
 	  // Format string
 	  sprintf(message_pressure, "%7.3f\r", pressure);
+	  USART2_PutBuffer((uint8_t *)message_pressure, strlen(message_pressure));
 
 	  // Delay
 	  LL_mDelay(25);
