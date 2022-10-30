@@ -22,7 +22,7 @@
 #include "i2c.h"
 #include "usart.h"
 #include "gpio.h"
-#include "../sensors/Inc/lps25hb.h"
+#include "lps25hb.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -104,7 +104,7 @@ int main(void)
 //  MX_I2C1_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  LPS25HB_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */

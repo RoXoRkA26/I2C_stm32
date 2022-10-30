@@ -26,8 +26,8 @@ uint8_t flag_end_of_read = 0;
 volatile uint8_t recv_index = 0;
 
 // Procedures and functions
-void i2c_master_write(uint8_t data, uint8_t register_addr, uint8_t slave_addr, uint8_t flag_read);
-uint8_t* i2c_master_read(uint8_t* buffer, uint8_t length, uint8_t register_addr, uint8_t slave_addr, uint8_t read_flag);
+//void i2c_master_write(uint8_t data, uint8_t register_addr, uint8_t slave_addr, uint8_t flag_read);
+//uint8_t* i2c_master_read(uint8_t* buffer, uint8_t length, uint8_t register_addr, uint8_t slave_addr, uint8_t read_flag);
 /* USER CODE END 0 */
 
 /* I2C1 init function */
@@ -42,12 +42,12 @@ void MX_I2C1_Init(void)
 
   LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOA);
+  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOB);
   /**I2C1 GPIO Configuration
   PA14   ------> I2C1_SDA
   PA15   ------> I2C1_SCL
   */
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_14|LL_GPIO_PIN_15;
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_6|LL_GPIO_PIN_7;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
   GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
@@ -76,7 +76,7 @@ void MX_I2C1_Init(void)
   I2C_InitStruct.Timing = 0x2000090E;
   I2C_InitStruct.AnalogFilter = LL_I2C_ANALOGFILTER_ENABLE;
   I2C_InitStruct.DigitalFilter = 0;
-  I2C_InitStruct.OwnAddress1 = 0;
+  I2C_InitStruct.OwnAddress1 = 2;
   I2C_InitStruct.TypeAcknowledge = LL_I2C_ACK;
   I2C_InitStruct.OwnAddrSize = LL_I2C_OWNADDRESS1_7BIT;
   LL_I2C_Init(I2C1, &I2C_InitStruct);
@@ -131,7 +131,7 @@ uint8_t* i2c_master_read(uint8_t* buffer, uint8_t length, uint8_t register_addr,
 
 	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, length, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_READ);
 
-		while(!LL_I2C_IsActiveFlag_STOP(I2C1)){};
+	while(!LL_I2C_IsActiveFlag_STOP(I2C1)){};
 
 		//End of transfer
 		LL_I2C_ClearFlag_STOP(I2C1);
@@ -143,11 +143,19 @@ uint8_t* i2c_master_read(uint8_t* buffer, uint8_t length, uint8_t register_addr,
 		return recv_buff;
 }
 
-void USART2_IRQHandler(void)
+void I2C1_EV_IRQHandler(void)
 {
-	if (LL_USART_IsActiveFlag_TC(USART2))
+/* USER CODE BEGIN I2C1_EV_IRQn 0 */
+	if (LL_I2C_IsActiveFlag_RXNE(I2C1))
 	{
-		LL_USART_ClearFlag_IDLE(USART2);
+		recv_buff[recv_index++] = LL_I2C_ReceiveData8(I2C1);
+		(recv_index > 19) ? recv_index = 0 : recv_index;
+		flag_end_of_read = 0;
 	}
+/* USER CODE END I2C1_EV_IRQn 0 */
+
+/* USER CODE BEGIN I2C1_EV_IRQn 1 */
+
+/* USER CODE END I2C1_EV_IRQn 1 */
 }
 /* USER CODE END 1 */
