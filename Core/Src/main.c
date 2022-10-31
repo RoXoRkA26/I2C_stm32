@@ -72,6 +72,8 @@ int main(void)
 
 	  // Delay
 	  LL_mDelay(25);
+
+	  // TODO: Spravne logovanie a vypocet relativnej vysky
   }
 }
 
