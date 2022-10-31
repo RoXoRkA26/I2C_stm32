@@ -36,6 +36,13 @@
 #define HTS221_T1_OUT_L					0x3E
 #define HTS221_T1_OUT_H					0x3F
 
+#define HTS221_H0_RH_x2					0x30
+#define HTS221_H1_RH_x2					0x31
+#define HTS221_H0_T0_OUT_L				0x36
+#define HTS221_H0_T0_OUT_H				0x37
+#define HTS221_H1_T0_OUT_L				0x3A
+#define HTS221_H1_T0_OUT_H				0x3B
+
 // Function prototypes
 uint8_t HTS221_Init();
 void HTS221_write_byte(uint8_t data, uint8_t register_addr, uint8_t slave_addr);

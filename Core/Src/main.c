@@ -63,6 +63,9 @@ int main(void)
 	  // Temperature
 	  float temperature = HTS221_get_temperature();
 
+	  // Humidity
+	  float humidity = HTS221_get_humidity();
+
 	  // Format string
 	  sprintf(message_pressure, "%7.3f,%3.1f\r", pressure, temperature);
 	  USART2_PutBuffer((uint8_t *)message_pressure, strlen(message_pressure));
@@ -71,7 +74,6 @@ int main(void)
 	  LL_mDelay(25);
   }
 }
-
 
 /**
   * @brief System Clock Configuration
