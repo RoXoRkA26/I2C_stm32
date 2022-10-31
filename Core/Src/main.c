@@ -30,14 +30,7 @@
 #include "string.h"
 #include "dma.h"
 
-#define CHAR_BUFF_SIZE	30
-
-uint8_t temp = 0;
-float mag[3], acc[3];
-char formated_text[30], value_x[10], value_y[10], value_z[10];
-
 void SystemClock_Config(void);
-
 
 int main(void)
 {
@@ -71,7 +64,7 @@ int main(void)
 	  float temperature = HTS221_get_temperature();
 
 	  // Format string
-	  sprintf(message_pressure, "%7.3f\r", pressure);
+	  sprintf(message_pressure, "%7.3f,%3.1f\r", pressure, temperature);
 	  USART2_PutBuffer((uint8_t *)message_pressure, strlen(message_pressure));
 
 	  // Delay

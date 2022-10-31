@@ -28,6 +28,14 @@
 #define HTS221_CALIBRATION_REG1			0x30
 #define HTS221_CALIBRATiON_REG2			0x3F
 
+#define HTS221_T0_DEG_C_x8				0x32
+#define HTS221_T1_DEG_C_x8				0x33
+#define HTS221_T1_T0_MSB				0x35
+#define HTS221_T0_OUT_L					0x3C
+#define HTS221_T0_OUT_H					0x3D
+#define HTS221_T1_OUT_L					0x3E
+#define HTS221_T1_OUT_H					0x3F
+
 // Function prototypes
 uint8_t HTS221_Init();
 void HTS221_write_byte(uint8_t data, uint8_t register_addr, uint8_t slave_addr);
