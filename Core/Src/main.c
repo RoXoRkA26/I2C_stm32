@@ -67,7 +67,7 @@ int main(void)
 	  float humidity = HTS221_get_humidity();
 
 	  // Format string
-	  sprintf(message_pressure, "%7.3f,%3.1f\r", pressure, temperature);
+	  sprintf(message_pressure, "%7.3f,%3.1f,%d\r", pressure, temperature, (int) humidity);
 	  USART2_PutBuffer((uint8_t *)message_pressure, strlen(message_pressure));
 
 	  // Delay
