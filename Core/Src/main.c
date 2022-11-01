@@ -72,10 +72,10 @@ int main(void)
 	  // Absolute height calculation
 	  float press_ratio =  PRESSURE_0 / pressure;
 	  float press_pw = powf(press_ratio, (1 / 5.257));
-	  float height = ((press_pw - 1) * (temperature + 273.15)) / 0.0065;
+	  float abs_height = ((press_pw - 1) * (temperature + 273.15)) / 0.0065;
 
 	  // Format string
-	  sprintf(message_pressure, "%7.3f, %3.1f, %d, %5.2f\r", pressure, temperature, (int) humidity);
+	  sprintf(message_pressure, "%7.3f, %3.1f, %d, %5.2f\r", pressure, temperature, (int) humidity, abs_height);
 	  USART2_PutBuffer((uint8_t *)message_pressure, strlen(message_pressure));
 
 	  // Delay
