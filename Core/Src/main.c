@@ -33,7 +33,7 @@
 #include <math.h>
 
 #define PRESSURE_0 1013.25
-#define N_REF_SAMPLES 50
+#define N_REF_SAMPLES 500
 float reference_pressure = 0.0;
 Filter lpPressure;
 
@@ -64,7 +64,7 @@ int main(void)
 	memset(message_pressure, 0, sizeof(message_pressure));
 
 	// Calculate reference pressure
-	for (uint8_t sample = 0; sample < N_REF_SAMPLES; sample++)
+	for (int sample = 0; sample < N_REF_SAMPLES; sample++)
 	{
 		reference_pressure += LPS25HB_get_pressure();
 		LL_mDelay(40);
