@@ -31,9 +31,9 @@
 #define LPS25HB_DEVICE_ADDRESS0				0xB8
 #define LPS25HB_DEVICE_ADDRESS1				0xBA
 
-#define REFERENCE_PRESSURE_XL				0x08
-#define REFERENCE_PRESSURE_L				0x09
-#define REFERENCE_PRESSURE_H				0x0A
+#define LPS25HB_REFERENCE_PRESSURE_XL		0x08
+#define LPS25HB_REFERENCE_PRESSURE_L		0x09
+#define LPS25HB_REFERENCE_PRESSURE_H		0x0A
 
 // Function prototypes
 uint8_t LPS25HB_Init();
@@ -41,6 +41,5 @@ void LPS25HB_write_byte(uint8_t data, uint8_t register_addr, uint8_t slave_addr)
 uint8_t LPS25HB_read_byte(uint8_t reg_addr);
 void LPS25HB_read_array(uint8_t* data, uint8_t reg, uint8_t length);
 float LPS25HB_get_pressure();
-float LPS25HB_get_reference_pressure();
 
 #endif /* INC_LPS25HB_H_ */

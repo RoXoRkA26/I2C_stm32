@@ -32,9 +32,13 @@
 #include <math.h>
 
 #define PRESSURE_0 1013.25
+#define N_REF_SAMPLES 50
 float reference_pressure = 0.0;
 
+
 void SystemClock_Config(void);
+
+// TODO: Filter pressure and height data
 
 int main(void)
 {
@@ -58,13 +62,12 @@ int main(void)
 	memset(message_pressure, 0, sizeof(message_pressure));
 
 	// Calculate reference pressure
-	uint8_t n_samples = 20;
-	for (uint8_t sample = 0; sample < n_samples; sample++)
+	for (uint8_t sample = 0; sample < N_REF_SAMPLES; sample++)
 	{
 		reference_pressure += LPS25HB_get_pressure();
-		LL_mDelay(500);
+		LL_mDelay(40);
 	}
-	reference_pressure /= n_samples;
+	reference_pressure /= N_REF_SAMPLES;
 
 	while (1)
 	{
@@ -94,7 +97,7 @@ int main(void)
 		USART2_PutBuffer((uint8_t*) message_pressure, strlen(message_pressure));
 
 		// Delay
-		LL_mDelay(25);
+		LL_mDelay(40);
 
 	}
 }
