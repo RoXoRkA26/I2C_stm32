@@ -79,7 +79,7 @@ int main(void)
 
 		// Pressure
 		float pressure = LPS25HB_get_pressure();
-		float fir_pressure = Filter_Update(&lpPressure, pressure);
+		float filtered_pressure = Filter_Update(&lpPressure, pressure);
 
 		// Temperature
 		float temperature = HTS221_get_temperature();
@@ -93,13 +93,13 @@ int main(void)
 //		float abs_height = ((press_pw - 1) * (temperature + 273.15)) / 0.0065;
 
 		// Relative height calculation
-		float press_ratio = reference_pressure / pressure;
+		float press_ratio = reference_pressure / filtered_pressure;
 		float press_pw = powf(press_ratio, (1 / 5.257));
 		float rel_height = ((press_pw - 1) * (temperature + 273.15)) / 0.0065;
 
 		// Format string
-//		sprintf(message_pressure, "%7.3f, %3.1f, %d, %5.2f\r", pressure, temperature, (int) humidity, rel_height);
-		sprintf(message_pressure, "%7.3f,%7.3f\r", pressure, fir_pressure);
+		sprintf(message_pressure, "%7.3f, %3.1f, %d, %5.2f\r", filtered_pressure, temperature, (int) humidity, rel_height);
+//		sprintf(message_pressure, "%7.3f,%7.3f\r", pressure, filtered_pressure);
 		USART2_PutBuffer((uint8_t*) message_pressure, strlen(message_pressure));
 
 		// Delay
