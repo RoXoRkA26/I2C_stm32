@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
+#include <filter.h>
 #include "main.h"
 #include "i2c.h"
 #include "gpio.h"
@@ -34,6 +35,7 @@
 #define PRESSURE_0 1013.25
 #define N_REF_SAMPLES 50
 float reference_pressure = 0.0;
+Filter lpPressure;
 
 
 void SystemClock_Config(void);
@@ -69,12 +71,15 @@ int main(void)
 	}
 	reference_pressure /= N_REF_SAMPLES;
 
+	Filter_Init(&lpPressure, reference_pressure);
+
 	while (1)
 	{
 		memset(message_pressure, '\0', sizeof(message_pressure));
 
 		// Pressure
 		float pressure = LPS25HB_get_pressure();
+		float fir_pressure = Filter_Update(&lpPressure, pressure);
 
 		// Temperature
 		float temperature = HTS221_get_temperature();
@@ -93,7 +98,8 @@ int main(void)
 		float rel_height = ((press_pw - 1) * (temperature + 273.15)) / 0.0065;
 
 		// Format string
-		sprintf(message_pressure, "%7.3f, %3.1f, %d, %5.2f\r", pressure, temperature, (int) humidity, rel_height);
+//		sprintf(message_pressure, "%7.3f, %3.1f, %d, %5.2f\r", pressure, temperature, (int) humidity, rel_height);
+		sprintf(message_pressure, "%7.3f,%7.3f\r", pressure, fir_pressure);
 		USART2_PutBuffer((uint8_t*) message_pressure, strlen(message_pressure));
 
 		// Delay
