@@ -39,6 +39,12 @@ float LPS25HB_get_pressure()
 	return pressure_real;
 }
 
+// LPS25HB_get_reference_pressure
+float LPS25HB_get_reference_pressure()
+{
+	return 0.0;
+}
+
 uint8_t LPS25HB_Init()
 {
 	uint8_t status = 1;
