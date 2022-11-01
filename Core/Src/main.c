@@ -29,6 +29,9 @@
 #include "stdio.h"
 #include "string.h"
 #include "dma.h"
+#include <math.h>
+
+#define PRESSURE_0 1013.25
 
 void SystemClock_Config(void);
 
@@ -66,14 +69,18 @@ int main(void)
 	  // Humidity
 	  float humidity = HTS221_get_humidity();
 
+	  // Absolute height calculation
+	  float press_ratio =  PRESSURE_0 / pressure;
+	  float press_pw = powf(press_ratio, (1 / 5.257));
+	  float height = ((press_pw - 1) * (temperature + 273.15)) / 0.0065;
+
 	  // Format string
-	  sprintf(message_pressure, "%7.3f,%3.1f,%d\r", pressure, temperature, (int) humidity);
+	  sprintf(message_pressure, "%7.3f, %3.1f, %d, %5.2f\r", pressure, temperature, (int) humidity);
 	  USART2_PutBuffer((uint8_t *)message_pressure, strlen(message_pressure));
 
 	  // Delay
 	  LL_mDelay(25);
 
-	  // TODO: Spravne logovanie a vypocet relativnej vysky
   }
 }
 
